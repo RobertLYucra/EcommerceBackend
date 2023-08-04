@@ -1,5 +1,7 @@
 using EcommerceBackend.Repository;
 using EcommerceBackend.Repository.Abstract;
+using EcommerceBackend.Resource;
+using EcommerceBackend.Resource.Abstract;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SistemaEncomienda.Repository;
@@ -23,6 +25,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //Resource
 builder.Services.AddScoped<ILoginResource,LoginResource>();
+builder.Services.AddScoped<IUserResource, UserResource>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

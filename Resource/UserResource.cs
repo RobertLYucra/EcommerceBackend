@@ -13,10 +13,10 @@ namespace EcommerceBackend.Resource
             _userRepository = userRepository;
             _configuration = configuration;
         }
-        public async Task<List<UserResponse>> GetAllEmployees()
+        public  List<UserResponse> GetAllEmployees()
         {
-            var employees = await _userRepository.GetAllEmployees();
-            var filteredEmployees = employees.Where(x => x.Status != false);
+            var employees =  _userRepository.GetAllEmployees();
+            var filteredEmployees = employees.Result.ToList().Where(x => x.Status != false);
 
             var listaEmployeesResponse = filteredEmployees.Select(employee => new UserResponse
             {
