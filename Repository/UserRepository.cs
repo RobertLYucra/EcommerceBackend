@@ -31,9 +31,18 @@ namespace EcommerceBackend.Repository
             return null;
         }
 
-        public Task<User> DeleteEmployee(int employeeId)
+        public async Task<bool> DeleteEmployee(int employeeId)
         {
-            throw new NotImplementedException();
+            try
+            {
+            var filter = Builders<User>.Filter.Eq(x => x.UserId, employeeId);
+            await Collection.DeleteOneAsync(filter);
+
+            return true;
+            }catch(Exception ex)
+            {
+                return false;
+            }
         }
 
         public Task<User> UpdateEmployee(User employee)

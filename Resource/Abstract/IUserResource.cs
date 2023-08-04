@@ -6,5 +6,6 @@ namespace EcommerceBackend.Resource.Abstract
     {
         List<UserResponse> GetAllEmployees();
         UserResponse GetById(int id);
+        bool DeleteEmployee(int employeeId);
     }
 }

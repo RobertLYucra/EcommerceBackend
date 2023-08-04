@@ -47,5 +47,23 @@ namespace EcommerceBackend.Controllers
                 throw ex;
             }
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var employe = _userResource.DeleteEmployee(id);
+                if (!employe)
+                {
+                    return NotFound(new MessageResponseObject(false, "Error al eliminar Empleado", null));
+                }
+                return Ok(new MessageResponseObject(true, "Empledo eliminado...", null));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace EcommerceBackend.Resource
             _userRepository = userRepository;
             _configuration = configuration;
         }
+
         public  List<UserResponse> GetAllEmployees()
         {
             var employees =  _userRepository.GetAllEmployees();
@@ -56,6 +57,13 @@ namespace EcommerceBackend.Resource
             {
                 throw ex;
             }
+        }
+
+        public bool DeleteEmployee(int employeeId)
+        {
+            var eliminated = _userRepository.DeleteEmployee(employeeId).Result;
+            if (eliminated) return true;
+            return false;
         }
     }
 }
