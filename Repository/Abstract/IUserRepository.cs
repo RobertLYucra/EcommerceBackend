@@ -1,5 +1,4 @@
-﻿using SistemaEncomienda.Contracts.Response;
-using SistemaEncomienda.Domain;
+﻿using EcommerceBackend.Domain;
 
 namespace EcommerceBackend.Repository.Abstract
 {
@@ -8,8 +7,8 @@ namespace EcommerceBackend.Repository.Abstract
         public Task<List<User>> GetAllEmployees();
 
         public Task<User> GetEmployeeById(int employeeId);
-        public Task<User> UpdateEmployee(User employee);
         public Task<bool> DeleteEmployee(int employeeId);
-        public Task<User> CreateEmployee(User employee);
+        public Task<bool> CreateEmployee(User employee);
+        public Task<bool> UpdateEmployee(User employee, int userId);
     }
 }

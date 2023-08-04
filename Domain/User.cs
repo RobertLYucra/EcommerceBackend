@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
+using System.Text.Json.Serialization;
 
-namespace SistemaEncomienda.Domain
+namespace EcommerceBackend.Domain
 {
     public class User
     {

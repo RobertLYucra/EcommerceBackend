@@ -1,7 +1,6 @@
-﻿
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 
-namespace SistemaEncomienda.Helpers
+namespace EcommerceBackend.Helpers
 {
     public class MongoConnections
     {

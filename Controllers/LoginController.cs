@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SistemaEncomienda.Contracts.Formats;
-using SistemaEncomienda.Domain;
-using SistemaEncomienda.Repository.Abstract;
-using SistemaEncomienda.Resource.Abstract;
+﻿using EcommerceBackend.Contracts.Formats;
+using EcommerceBackend.Domain;
+using EcommerceBackend.Resource.Abstract;
+using Microsoft.AspNetCore.Mvc;
 
-namespace SistemaEncomienda.Controllers
+namespace EcommerceBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

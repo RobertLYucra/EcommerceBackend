@@ -1,4 +1,4 @@
-﻿namespace SistemaEncomienda.Contracts.Response
+﻿namespace EcommerceBackend.Contracts.Response
 {
     public class UserTokenResponse
     {

@@ -1,6 +1,8 @@
-﻿using EcommerceBackend.Repository.Abstract;
+﻿using EcommerceBackend.Contracts.Params;
+using EcommerceBackend.Contracts.Response;
+using EcommerceBackend.Domain;
+using EcommerceBackend.Repository.Abstract;
 using EcommerceBackend.Resource.Abstract;
-using SistemaEncomienda.Contracts.Response;
 
 namespace EcommerceBackend.Resource
 {
@@ -14,9 +16,9 @@ namespace EcommerceBackend.Resource
             _configuration = configuration;
         }
 
-        public  List<UserResponse> GetAllEmployees()
+        public List<UserResponse> GetAllEmployees()
         {
-            var employees =  _userRepository.GetAllEmployees();
+            var employees = _userRepository.GetAllEmployees();
             var filteredEmployees = employees.Result.ToList().Where(x => x.Status != false);
 
             var listaEmployeesResponse = filteredEmployees.Select(employee => new UserResponse
@@ -53,7 +55,8 @@ namespace EcommerceBackend.Resource
                     Created = employee.Created
                 };
                 return employeeResponse;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -64,6 +67,43 @@ namespace EcommerceBackend.Resource
             var eliminated = _userRepository.DeleteEmployee(employeeId).Result;
             if (eliminated) return true;
             return false;
+        }
+
+        public async Task<UserResponse> UpdateEmployee(UserParams userParams, int employeeId)
+        {
+            User existingEmployee = await _userRepository.GetEmployeeById(employeeId);
+            if (existingEmployee == null)
+            {
+                return null;
+            }
+
+            existingEmployee.Rol = userParams.Rol;
+            existingEmployee.Name = userParams.Name;
+            existingEmployee.LastName = userParams.LastName;
+            existingEmployee.Email = userParams.Email;
+            existingEmployee.DNI = userParams.DNI;
+            existingEmployee.Telephone = userParams.Telephone;
+            existingEmployee.Status = userParams.Status;
+            existingEmployee.Created = DateTime.UtcNow;
+
+
+            var updated = await _userRepository.UpdateEmployee(existingEmployee, employeeId);
+            if (updated)
+            {
+                return new UserResponse
+                {
+                    UserId = existingEmployee.UserId,
+                    Rol = existingEmployee.Rol,
+                    Name = existingEmployee.Name,
+                    LastName = existingEmployee.LastName,
+                    Email = existingEmployee.Email,
+                    DNI = existingEmployee.DNI,
+                    Telephone = existingEmployee.Telephone,
+                    Status = existingEmployee.Status,
+                    Created = existingEmployee.Created
+                };
+            }
+            return null;
         }
     }
 }

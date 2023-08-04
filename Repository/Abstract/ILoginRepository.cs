@@ -1,6 +1,7 @@
-﻿using SistemaEncomienda.Domain;
+﻿
+using EcommerceBackend.Domain;
 
-namespace SistemaEncomienda.Repository.Abstract
+namespace EcommerceBackend.Repository.Abstract
 {
     public interface ILoginRepository
     {

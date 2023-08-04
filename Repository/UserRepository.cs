@@ -1,8 +1,8 @@
-﻿using EcommerceBackend.Repository.Abstract;
+﻿using EcommerceBackend.Domain;
+using EcommerceBackend.Helpers;
+using EcommerceBackend.Repository.Abstract;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using SistemaEncomienda.Domain;
-using SistemaEncomienda.Helpers;
 
 namespace EcommerceBackend.Repository
 {
@@ -18,36 +18,63 @@ namespace EcommerceBackend.Repository
 
         public async Task<List<User>> GetAllEmployees()
         {
-            return await  Collection.FindAsync(new BsonDocument()).Result.ToListAsync();
+            return await Collection.FindAsync(new BsonDocument()).Result.ToListAsync();
         }
 
         public async Task<User> GetEmployeeById(int employeeId)
         {
-            var filter = Builders<User>.Filter.Eq(x=>x.UserId,employeeId);
+            var filter = Builders<User>.Filter.Eq(x => x.UserId, employeeId);
             return await Collection.FindAsync(filter).Result.FirstOrDefaultAsync();
         }
-        public Task<User> CreateEmployee(User employee)
+        public async Task<bool> CreateEmployee(User employee)
         {
-            return null;
+            try
+            {
+                await Collection.InsertOneAsync(employee);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> DeleteEmployee(int employeeId)
         {
             try
             {
-            var filter = Builders<User>.Filter.Eq(x => x.UserId, employeeId);
-            await Collection.DeleteOneAsync(filter);
+                var filter = Builders<User>.Filter.Eq(x => x.UserId, employeeId);
+                await Collection.DeleteOneAsync(filter);
 
-            return true;
-            }catch(Exception ex)
+                return true;
+            }
+            catch (Exception ex)
             {
                 return false;
             }
         }
 
-        public Task<User> UpdateEmployee(User employee)
+        public async Task<bool> UpdateEmployee(User employee, int userId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                employee.Credentials.Validate();
+                var filter = Builders<User>.Filter.Eq(x => x.UserId, userId);
+                var result = await Collection.ReplaceOneAsync(filter, employee);
+                if (result.IsAcknowledged && result.ModifiedCount > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (ArgumentException ex)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

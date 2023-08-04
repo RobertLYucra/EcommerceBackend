@@ -1,10 +1,9 @@
-﻿using MongoDB.Bson;
+﻿using EcommerceBackend.Domain;
+using EcommerceBackend.Helpers;
+using EcommerceBackend.Repository.Abstract;
 using MongoDB.Driver;
-using SistemaEncomienda.Domain;
-using SistemaEncomienda.Helpers;
-using SistemaEncomienda.Repository.Abstract;
 
-namespace SistemaEncomienda.Repository
+namespace EcommerceBackend.Repository
 {
     public class LoginRepository : ILoginRepository
     {
@@ -22,7 +21,8 @@ namespace SistemaEncomienda.Repository
             {
             var filter = Builders<User>.Filter.And(
                 Builders<User>.Filter.Eq(x => x.Credentials.username, userLogin.username),
-                Builders<User>.Filter.Eq(x => x.Credentials.password, userLogin.password)
+                Builders<User>.Filter.Eq(x => x.Credentials.password, userLogin.password),
+                Builders<User>.Filter.Eq(x=>x.Status,true)
                 );
             var currentUser = await Collection.Find(filter).FirstOrDefaultAsync();
             if(currentUser != null ) return currentUser;

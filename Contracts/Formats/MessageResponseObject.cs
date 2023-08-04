@@ -1,6 +1,4 @@
-﻿using SistemaEncomienda.Contracts.Response;
-
-namespace SistemaEncomienda.Contracts.Formats
+﻿namespace EcommerceBackend.Contracts.Formats
 {
     public class MessageResponseObject
     {

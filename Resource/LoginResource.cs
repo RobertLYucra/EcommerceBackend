@@ -1,13 +1,13 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using SistemaEncomienda.Contracts.Response;
-using SistemaEncomienda.Domain;
-using SistemaEncomienda.Repository.Abstract;
-using SistemaEncomienda.Resource.Abstract;
+﻿using EcommerceBackend.Contracts.Response;
+using EcommerceBackend.Domain;
+using EcommerceBackend.Repository.Abstract;
+using EcommerceBackend.Resource.Abstract;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace SistemaEncomienda.Resource
+namespace EcommerceBackend.Resource
 {
     public class LoginResource : ILoginResource
     {

@@ -1,7 +1,7 @@
-﻿using SistemaEncomienda.Contracts.Response;
-using SistemaEncomienda.Domain;
+﻿using EcommerceBackend.Contracts.Response;
+using EcommerceBackend.Domain;
 
-namespace SistemaEncomienda.Resource.Abstract
+namespace EcommerceBackend.Resource.Abstract
 {
     public interface ILoginResource
     {

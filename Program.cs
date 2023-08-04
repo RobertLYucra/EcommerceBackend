@@ -1,13 +1,10 @@
+using EcommerceBackend.Helpers;
 using EcommerceBackend.Repository;
 using EcommerceBackend.Repository.Abstract;
 using EcommerceBackend.Resource;
 using EcommerceBackend.Resource.Abstract;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using SistemaEncomienda.Repository;
-using SistemaEncomienda.Repository.Abstract;
-using SistemaEncomienda.Resource;
-using SistemaEncomienda.Resource.Abstract;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<TokenHelper>();
+
 //Repository
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -27,6 +26,15 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoginResource,LoginResource>();
 builder.Services.AddScoped<IUserResource, UserResource>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
@@ -55,7 +63,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseCors("AllowOrigin");
 app.MapControllers();
 
 app.Run();
