@@ -17,7 +17,6 @@ namespace EcommerceBackend.Controllers
         }
 
         [HttpGet]
-        [Route("getAllUser")]
         public IActionResult Get()
         {
             try
@@ -29,7 +28,24 @@ namespace EcommerceBackend.Controllers
             {
                 throw ex;
             }
+        }
 
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            try
+            {
+                var employe = _userResource.GetById(id);
+                if(employe == null)
+                {
+                    return NotFound(new MessageResponseObject(false,"Empledo no encontado...",null));
+                }
+                return Ok(new MessageResponseObject(true, "Empledo encontrado :)", employe));
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

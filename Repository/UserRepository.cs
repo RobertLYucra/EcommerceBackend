@@ -21,9 +21,10 @@ namespace EcommerceBackend.Repository
             return await  Collection.FindAsync(new BsonDocument()).Result.ToListAsync();
         }
 
-        public Task<User> GetEmployeeById(int employeeId)
+        public async Task<User> GetEmployeeById(int employeeId)
         {
-            throw new NotImplementedException();
+            var filter = Builders<User>.Filter.Eq(x=>x.UserId,employeeId);
+            return await Collection.FindAsync(filter).Result.FirstOrDefaultAsync();
         }
         public Task<User> CreateEmployee(User employee)
         {

@@ -33,5 +33,29 @@ namespace EcommerceBackend.Resource
 
             return listaEmployeesResponse;
         }
+
+        public UserResponse GetById(int id)
+        {
+            try
+            {
+                var employee = _userRepository.GetEmployeeById(id).Result;
+                var employeeResponse = new UserResponse
+                {
+                    UserId = employee.UserId,
+                    Rol = employee.Rol,
+                    Name = employee.Name,
+                    LastName = employee.LastName,
+                    Email = employee.Email,
+                    DNI = employee.DNI,
+                    Telephone = employee.Telephone,
+                    Status = employee.Status,
+                    Created = employee.Created
+                };
+                return employeeResponse;
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
