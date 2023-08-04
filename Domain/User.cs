@@ -15,6 +15,8 @@ namespace SistemaEncomienda.Domain
         public string? Telephone { get; set; }
         public DateTime? Created { get; set; }
         public bool Status { get; set; }
+        [JsonIgnore]
+        public Action SomeAction { get; set; }
     }
 
     public class UserLogin
