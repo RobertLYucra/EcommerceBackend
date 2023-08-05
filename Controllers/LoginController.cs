@@ -23,9 +23,9 @@ namespace EcommerceBackend.Controllers
                 var user = _loginResource.GetUserLogin(userLogin);
                 if(user == null)
                 {
-                    return NotFound(new MessageResponseObject(false,"Credenciales incorrectas",null));
+                    return NotFound(new MessageResponse(false,"Credenciales incorrectas",null));
                 }
-                return Ok(new MessageResponseObject(true, "Inicio de sesión exitoso...", user));
+                return Ok(new MessageResponse(true, "Inicio de sesión exitoso...", user));
             }
             catch (Exception ex)
             {

@@ -6,7 +6,7 @@ namespace EcommerceBackend.Domain
     public class User
     {
         public ObjectId Id { get; set; }
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public string Rol { get; set; }
         public UserLogin Credentials { get; set; }
         public string Name { get; set; }
@@ -15,9 +15,7 @@ namespace EcommerceBackend.Domain
         public string DNI { get; set; }
         public string? Telephone { get; set; }
         public DateTime? Created { get; set; }
-        public bool Status { get; set; }
-        [JsonIgnore]
-        public Action SomeAction { get; set; }
+        public bool IsActive { get; set; }
     }
 
     public class UserLogin

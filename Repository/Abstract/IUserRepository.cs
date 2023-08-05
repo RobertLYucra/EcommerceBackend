@@ -6,9 +6,10 @@ namespace EcommerceBackend.Repository.Abstract
     {
         public Task<List<User>> GetAllEmployees();
 
-        public Task<User> GetEmployeeById(int employeeId);
-        public Task<bool> DeleteEmployee(int employeeId);
+        public Task<User> GetEmployeeById(Guid employeeId);
+        public Task<bool> DeleteEmployee(Guid employeeId);
         public Task<bool> CreateEmployee(User employee);
-        public Task<bool> UpdateEmployee(User employee, int userId);
+        public Task<bool> UpdateEmployee(User employee, Guid userId);
+        Task<User> GetEmployeeByNameDni(string name, string lastName, string dni);
     }
 }

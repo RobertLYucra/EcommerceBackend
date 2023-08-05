@@ -1,10 +1,11 @@
 ﻿using EcommerceBackend.Domain;
+using System.Net;
 
 namespace EcommerceBackend.Contracts.Params
 {
     public class UserParams
     {
-        public int? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string Rol { get; set; }
         public UserLogin ? Credentials { get; set; }
         public string Name { get; set; }
@@ -12,6 +13,6 @@ namespace EcommerceBackend.Contracts.Params
         public string Email { get; set; }
         public string DNI { get; set; }
         public string Telephone { get; set; }
-        public bool Status { get; set; }
+        public bool IsActive { get; set; }
     }
 }

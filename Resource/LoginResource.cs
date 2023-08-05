@@ -1,5 +1,6 @@
 ﻿using EcommerceBackend.Contracts.Response;
 using EcommerceBackend.Domain;
+using EcommerceBackend.Mapper.Abstract;
 using EcommerceBackend.Repository.Abstract;
 using EcommerceBackend.Resource.Abstract;
 using Microsoft.IdentityModel.Tokens;
@@ -13,10 +14,12 @@ namespace EcommerceBackend.Resource
     {
         private readonly ILoginRepository _loginRepository;
         private readonly IConfiguration _configuration;
-        public LoginResource(ILoginRepository loginRepository, IConfiguration configuration)
+        private readonly IUserMapper _userMapper;
+        public LoginResource(ILoginRepository loginRepository, IConfiguration configuration, IUserMapper userMapper)
         {
             _loginRepository = loginRepository;
             _configuration = configuration;
+            _userMapper = userMapper;
         }
 
         public UserTokenResponse GetUserLogin(UserLogin userLogin)
@@ -28,17 +31,7 @@ namespace EcommerceBackend.Resource
                 var token = GenerateToken(currentUser);
                 var userTokenResponse = new UserTokenResponse
                 {
-                    UserResponse = new UserResponse
-                    {
-                        UserId = currentUser.UserId,
-                        Rol = currentUser.Rol,
-                        Name = currentUser.Name,
-                        LastName = currentUser.LastName,
-                        Email = currentUser.Email,
-                        DNI = currentUser.DNI,
-                        Telephone = currentUser.Telephone,
-                        Status = currentUser.Status
-                    },
+                    UserResponse = _userMapper.UserResponseFormato(currentUser),
                     Token = token
                 };
 
@@ -46,10 +39,10 @@ namespace EcommerceBackend.Resource
             }
             return null;
         }
-        
+
         private string GenerateToken(User user)
         {
-            var securityKeys = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
+            var securityKeys = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
             var credentials = new SigningCredentials(securityKeys, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -60,15 +53,15 @@ namespace EcommerceBackend.Resource
                 new Claim(ClaimTypes.Surname,user.LastName),
                 new Claim(ClaimTypes.Role,user.Rol),
                 new Claim("DNI",user.DNI),
-                new Claim("Status",user.Status.ToString())
+                new Claim("IsActive",user.IsActive.ToString())
             };
             var token = new JwtSecurityToken(
-                                    _configuration["Jwt:Issuer"],
-                                    _configuration["Jwt:Audience"],
-                                    claims,
-                                    expires: DateTime.Now.AddMinutes(15),
-                                    signingCredentials: credentials
-                                    );
+                    _configuration["JWT:Issuer"],
+                    _configuration["JWT:Audience"],
+                    claims,
+                    expires: DateTime.Now.AddMinutes(15),
+                    signingCredentials: credentials
+);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

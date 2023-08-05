@@ -40,7 +40,7 @@ namespace EcommerceBackend.Helpers
                 Email = user.Email,
                 DNI = user.DNI,
                 Telephone = user.Telephone,
-                Status = user.Status,
+                IsActive = user.IsActive,
                 Created = user.Created
             };
 

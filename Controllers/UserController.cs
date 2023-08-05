@@ -24,11 +24,11 @@ namespace EcommerceBackend.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             try
             {              
-                var employees = _userResource.GetAllEmployees();
+                var employees = await _userResource.GetAllEmployees();
                 return Ok(new MessageResponseList<UserResponse>(true, "Lista de empleados", employees));
             }
             catch (Exception ex)
@@ -38,16 +38,16 @@ namespace EcommerceBackend.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             try
             {
-                var employe = _userResource.GetById(id);
-                if (employe == null)
+                var employe = await _userResource.GetById(id);
+                if (employe != null)
                 {
-                    return NotFound(new MessageResponseObject(false, "Empledo no encontado...", null));
+                    return Ok(new MessageResponse(true, "Empledo encontrado :)", employe));
                 }
-                return Ok(new MessageResponseObject(true, "Empledo encontrado :)", employe));
+                return NotFound(new MessageResponse(false, "Empledo no encontado...", null));
             }
             catch (Exception ex)
             {
@@ -56,34 +56,47 @@ namespace EcommerceBackend.Controllers
         }
 
         [HttpDelete("{userId}")]
-        public IActionResult Delete(int userId)
+        public IActionResult Delete(Guid userId)
         {
             try
             {
                 var employe = _userResource.DeleteEmployee(userId);
                 if (!employe)
                 {
-                    return NotFound(new MessageResponseObject(false, "Error al eliminar Empleado", null));
+                    return NotFound(new MessageResponse(false, "Error al eliminar Empleado", null));
                 }
-                return Ok(new MessageResponseObject(true, "Empledo eliminado...", null));
+                return Ok(new MessageResponse(true, "Empledo eliminado...", null));
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> CreateEmployee(UserParams userParams)
+        {
+            userParams.Credentials.Validate();
+
+            var userResponse = await _userResource.CreateEmployee(userParams);
+            if(userResponse != null)
+            {
+                return Ok(new MessageResponse(true,"Usuario creado",userResponse));
+            }
+            return BadRequest(new MessageResponse(false,"Error al crear usuario",null));
+        }
+
         [HttpPut("{userId}")]
-        public async Task<IActionResult> UpdateUser(UserParams userParams, int userId)
+        public async Task<IActionResult> UpdateUser(UserParams userParams, Guid userId)
         {
             try
             {
                 var employee = await _userResource.UpdateEmployee(userParams, userId);
-                if (employee != null) return Ok(new MessageResponseObject(true, "User updated...", employee));
-                return BadRequest(new MessageResponseObject(true, "User updated...", null));
+                if (employee != null) return Ok(new MessageResponse(true, "User updated...", employee));
+                return BadRequest(new MessageResponse(true, "User updated...", null));
             }
             catch (Exception ex)
             {
-                return BadRequest(new MessageResponseObject(false, ex.Message, null));
+                return BadRequest(new MessageResponse(false, ex.Message, null));
             }
 
         }

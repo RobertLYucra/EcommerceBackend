@@ -18,13 +18,33 @@ namespace EcommerceBackend.Repository
 
         public async Task<List<User>> GetAllEmployees()
         {
-            return await Collection.FindAsync(new BsonDocument()).Result.ToListAsync();
+            var filter = Builders<User>.Filter.Eq(x => x.IsActive, true);
+            var employees = await Collection.Find(filter).ToListAsync();
+            return employees;
         }
 
-        public async Task<User> GetEmployeeById(int employeeId)
+        public async Task<User> GetEmployeeByNameDni(string name, string lastName, string dni)
         {
-            var filter = Builders<User>.Filter.Eq(x => x.UserId, employeeId);
-            return await Collection.FindAsync(filter).Result.FirstOrDefaultAsync();
+            var filter = Builders<User>.Filter.And(
+               Builders<User>.Filter.Eq(x => x.Name, name),
+               Builders<User>.Filter.Eq(x => x.LastName, lastName),
+               Builders<User>.Filter.Eq(x => x.DNI, dni),
+               Builders<User>.Filter.Eq(x => x.IsActive, false)
+               );
+            return await Collection.Find(filter).FirstOrDefaultAsync();
+        }
+
+        public async Task<User> GetEmployeeById(Guid employeeId)
+        {
+            try
+            {
+                var filter = Builders<User>.Filter.Eq(x => x.UserId,employeeId);
+                return await Collection.Find(filter).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         public async Task<bool> CreateEmployee(User employee)
         {
@@ -39,7 +59,7 @@ namespace EcommerceBackend.Repository
             }
         }
 
-        public async Task<bool> DeleteEmployee(int employeeId)
+        public async Task<bool> DeleteEmployee(Guid employeeId)
         {
             try
             {
@@ -54,7 +74,7 @@ namespace EcommerceBackend.Repository
             }
         }
 
-        public async Task<bool> UpdateEmployee(User employee, int userId)
+        public async Task<bool> UpdateEmployee(User employee, Guid userId)
         {
             try
             {

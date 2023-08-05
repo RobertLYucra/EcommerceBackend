@@ -22,7 +22,7 @@ namespace EcommerceBackend.Repository
             var filter = Builders<User>.Filter.And(
                 Builders<User>.Filter.Eq(x => x.Credentials.username, userLogin.username),
                 Builders<User>.Filter.Eq(x => x.Credentials.password, userLogin.password),
-                Builders<User>.Filter.Eq(x=>x.Status,true)
+                Builders<User>.Filter.Eq(x=>x.IsActive,true)
                 );
             var currentUser = await Collection.Find(filter).FirstOrDefaultAsync();
             if(currentUser != null ) return currentUser;

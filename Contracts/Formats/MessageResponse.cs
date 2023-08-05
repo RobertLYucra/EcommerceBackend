@@ -1,12 +1,12 @@
 ﻿namespace EcommerceBackend.Contracts.Formats
 {
-    public class MessageResponseObject
+    public class MessageResponse
     {
         public bool Success { get; set; }
         public string Message { get; set; }
         public Object Result { get; set; }
 
-        public MessageResponseObject(bool succes, string message, Object result ) {
+        public MessageResponse(bool succes, string message, Object result ) {
             Success = succes;
             Message = message;
             Result = result;

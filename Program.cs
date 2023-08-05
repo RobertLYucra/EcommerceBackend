@@ -1,4 +1,6 @@
 using EcommerceBackend.Helpers;
+using EcommerceBackend.Mapper;
+using EcommerceBackend.Mapper.Abstract;
 using EcommerceBackend.Repository;
 using EcommerceBackend.Repository.Abstract;
 using EcommerceBackend.Resource;
@@ -26,6 +28,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoginResource,LoginResource>();
 builder.Services.AddScoped<IUserResource, UserResource>();
 
+//Mapper
+builder.Services.AddScoped<IUserMapper, UserMapper>();
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin", builder =>
@@ -46,9 +52,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"]))
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:key"]))
     };
 });
 var app = builder.Build();
@@ -61,7 +67,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("AllowOrigin");
 app.MapControllers();

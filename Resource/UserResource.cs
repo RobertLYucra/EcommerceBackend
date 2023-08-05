@@ -1,6 +1,7 @@
 ﻿using EcommerceBackend.Contracts.Params;
 using EcommerceBackend.Contracts.Response;
 using EcommerceBackend.Domain;
+using EcommerceBackend.Mapper.Abstract;
 using EcommerceBackend.Repository.Abstract;
 using EcommerceBackend.Resource.Abstract;
 
@@ -10,51 +11,40 @@ namespace EcommerceBackend.Resource
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
-        public UserResource(IUserRepository userRepository, IConfiguration configuration)
+        private readonly IUserMapper _userMapper;
+        public UserResource(IUserRepository userRepository, IConfiguration configuration, IUserMapper userMapper)
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _userMapper = userMapper;
         }
 
-        public List<UserResponse> GetAllEmployees()
-        {
-            var employees = _userRepository.GetAllEmployees();
-            var filteredEmployees = employees.Result.ToList().Where(x => x.Status != false);
-
-            var listaEmployeesResponse = filteredEmployees.Select(employee => new UserResponse
-            {
-                UserId = employee.UserId,
-                Rol = employee.Rol,
-                Name = employee.Name,
-                LastName = employee.LastName,
-                Email = employee.Email,
-                DNI = employee.DNI,
-                Telephone = employee.Telephone,
-                Status = employee.Status,
-                Created = employee.Created
-            }).ToList();
-
-            return listaEmployeesResponse;
-        }
-
-        public UserResponse GetById(int id)
+        public async Task<List<UserResponse>> GetAllEmployees()
         {
             try
             {
-                var employee = _userRepository.GetEmployeeById(id).Result;
-                var employeeResponse = new UserResponse
+                var employees = await _userRepository.GetAllEmployees();
+                var listaEmployeesResponse = employees.Select(employee => _userMapper.UserResponseFormato(employee)).ToList();
+                return listaEmployeesResponse;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public async Task<UserResponse> GetById(Guid id)
+        {
+            try
+            {
+                var employee = await _userRepository.GetEmployeeById(id);
+                if (employee != null)
                 {
-                    UserId = employee.UserId,
-                    Rol = employee.Rol,
-                    Name = employee.Name,
-                    LastName = employee.LastName,
-                    Email = employee.Email,
-                    DNI = employee.DNI,
-                    Telephone = employee.Telephone,
-                    Status = employee.Status,
-                    Created = employee.Created
-                };
-                return employeeResponse;
+                    var employeeFound =  _userMapper.UserResponseFormato(employee);
+                    return employeeFound;
+                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -62,48 +52,90 @@ namespace EcommerceBackend.Resource
             }
         }
 
-        public bool DeleteEmployee(int employeeId)
+        public bool DeleteEmployee(Guid employeeId)
         {
-            var eliminated = _userRepository.DeleteEmployee(employeeId).Result;
-            if (eliminated) return true;
-            return false;
+            try
+            {
+                var eliminated = _userRepository.DeleteEmployee(employeeId).Result;
+                if (eliminated) return true;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public async Task<UserResponse> UpdateEmployee(UserParams userParams, int employeeId)
+        public async Task<UserResponse> CreateEmployee(UserParams userParams)
         {
-            User existingEmployee = await _userRepository.GetEmployeeById(employeeId);
-            if (existingEmployee == null)
+            try
             {
+                var existingEmployee = await _userRepository.GetEmployeeByNameDni(userParams.Name,userParams.LastName,userParams.DNI);
+                if (existingEmployee != null)
+                {
+                    existingEmployee.Rol = userParams.Rol;
+                    existingEmployee.Email = userParams.Email;
+                    existingEmployee.Telephone = userParams.Telephone;
+                    existingEmployee.IsActive = userParams.IsActive;
+
+                    var updated = await _userRepository.UpdateEmployee(existingEmployee, existingEmployee.UserId);
+                    return updated ? _userMapper.UserResponseFormato(existingEmployee) : null;
+                }
+
+                var ExistActive = GetAllEmployees().Result.Where(x=>x.Name == userParams.Name && x.LastName == userParams.LastName && x.DNI == userParams.DNI).ToList();
+                if (ExistActive.Count()==0)
+                {
+                    var user = new User
+                    {
+                        UserId = Guid.NewGuid(),
+                        Rol = userParams.Rol,
+                        Credentials = userParams.Credentials,
+                        Name = userParams.Name,
+                        LastName = userParams.LastName,
+                        Email = userParams.Email,
+                        DNI = userParams.DNI,
+                        Telephone = userParams.Telephone,
+                        IsActive = userParams.IsActive,
+                        Created = DateTime.Now
+                    };
+
+                    var created = await _userRepository.CreateEmployee(user);
+                    return created ? _userMapper.UserResponseFormato(user) : null;
+                }
                 return null;
             }
-
-            existingEmployee.Rol = userParams.Rol;
-            existingEmployee.Name = userParams.Name;
-            existingEmployee.LastName = userParams.LastName;
-            existingEmployee.Email = userParams.Email;
-            existingEmployee.DNI = userParams.DNI;
-            existingEmployee.Telephone = userParams.Telephone;
-            existingEmployee.Status = userParams.Status;
-            existingEmployee.Created = DateTime.UtcNow;
-
-
-            var updated = await _userRepository.UpdateEmployee(existingEmployee, employeeId);
-            if (updated)
+            catch (Exception ex)
             {
-                return new UserResponse
-                {
-                    UserId = existingEmployee.UserId,
-                    Rol = existingEmployee.Rol,
-                    Name = existingEmployee.Name,
-                    LastName = existingEmployee.LastName,
-                    Email = existingEmployee.Email,
-                    DNI = existingEmployee.DNI,
-                    Telephone = existingEmployee.Telephone,
-                    Status = existingEmployee.Status,
-                    Created = existingEmployee.Created
-                };
+                throw ex;
             }
-            return null;
+        }
+
+        public async Task<UserResponse> UpdateEmployee(UserParams userParams, Guid employeeId)
+        {
+            try
+            {
+                User existingEmployee = await _userRepository.GetEmployeeById(employeeId);
+                if (existingEmployee == null)
+                {
+                    return null;
+                }
+
+                existingEmployee.Rol = userParams.Rol;
+                existingEmployee.Name = userParams.Name;
+                existingEmployee.LastName = userParams.LastName;
+                existingEmployee.Email = userParams.Email;
+                existingEmployee.DNI = userParams.DNI;
+                existingEmployee.Telephone = userParams.Telephone;
+                existingEmployee.IsActive = userParams.IsActive;
+
+                var updated = await _userRepository.UpdateEmployee(existingEmployee, employeeId);
+                return updated ? _userMapper.UserResponseFormato(existingEmployee) : null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
     }
 }
