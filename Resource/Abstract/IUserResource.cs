@@ -7,7 +7,7 @@ namespace EcommerceBackend.Resource.Abstract
     {
         Task<List<UserResponse>> GetAllEmployees();
         Task<UserResponse> GetById(Guid id);
-        bool DeleteEmployee(Guid employeeId);
+       Task<bool> DeleteEmployee(Guid employeeId);
         Task<UserResponse> CreateEmployee(UserParams userParams);
         Task<UserResponse> UpdateEmployee(UserParams userParams, Guid employeeId);
     }

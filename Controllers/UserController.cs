@@ -72,22 +72,23 @@ namespace EcommerceBackend.Controllers
         }
 
         [HttpDelete("{userId}")]
-        public IActionResult Delete(Guid userId)
+        public async Task<IActionResult> Delete(Guid userId)
         {
             try
             {
-                var employe = _userResource.DeleteEmployee(userId);
+                var employe = await _userResource.DeleteEmployee(userId);
                 if (!employe)
                 {
-                    return NotFound(new MessageResponse(false, "Error al eliminar Empleado", null));
+                    return NotFound(new MessageResponse(false, "El empleado no fue encontrado o ya está desactivado.", null));
                 }
-                return Ok(new MessageResponse(true, "Empledo eliminado...", null));
+                return Ok(new MessageResponse(true, "Empleado eliminado correctamente.", null));
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error al intentar eliminar al empleado.", ex);
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateEmployee(UserParams userParams)
         {

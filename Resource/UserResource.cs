@@ -52,13 +52,16 @@ namespace EcommerceBackend.Resource
             }
         }
 
-        public bool DeleteEmployee(Guid employeeId)
+        public async Task<bool> DeleteEmployee(Guid employeeId)
         {
             try
             {
-                var eliminated = _userRepository.DeleteEmployee(employeeId).Result;
-                if (eliminated) return true;
-                return false;
+                var userCurrent = await _userRepository.GetEmployeeById(employeeId);
+                if (userCurrent == null) return false;
+
+                userCurrent.IsActive = false;
+                var updatesOrEliminated = await _userRepository.UpdateEmployee(userCurrent, employeeId);
+                return updatesOrEliminated;
             }
             catch (Exception ex)
             {
