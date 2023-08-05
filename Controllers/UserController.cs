@@ -37,6 +37,22 @@ namespace EcommerceBackend.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        [Route("/autorize")]
+        public async Task<IActionResult> GetAutoRize()
+        {
+            try
+            {
+                var employees = await _userResource.GetAllEmployees();
+                return Ok(new MessageResponseList<UserResponse>(true, "Lista de empleados", employees));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
