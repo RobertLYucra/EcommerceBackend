@@ -16,7 +16,7 @@ namespace EcommerceBackend.Helpers
             var settings = MongoClientSettings.FromConnectionString(connectionString);
             settings.ServerApi = new ServerApi(ServerApiVersion.V1);
             client = new MongoClient(settings);
-            database = client.GetDatabase("Encomienda");
+            database = client.GetDatabase("EcommerceBackend");
         }
     }
 }
