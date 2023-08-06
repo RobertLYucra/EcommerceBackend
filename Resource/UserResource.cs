@@ -129,7 +129,10 @@ namespace EcommerceBackend.Resource
                 existingEmployee.Email = userParams.Email;
                 existingEmployee.DNI = userParams.DNI;
                 existingEmployee.Telephone = userParams.Telephone;
-                existingEmployee.IsActive = userParams.IsActive;
+                if (userParams.IsActive != null)
+                {
+                    existingEmployee.IsActive = userParams.IsActive;
+                }
 
                 var updated = await _userRepository.UpdateEmployee(existingEmployee, employeeId);
                 return updated ? _userMapper.UserResponseFormato(existingEmployee) : null;
