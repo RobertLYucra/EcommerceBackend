@@ -13,6 +13,6 @@ namespace EcommerceBackend.Contracts.Params
         public string Email { get; set; }
         public string DNI { get; set; }
         public string Telephone { get; set; }
-        public bool IsActive { get; set; }
+        public bool ?IsActive { get; set; }
     }
 }
