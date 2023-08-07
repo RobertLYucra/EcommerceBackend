@@ -1,4 +1,4 @@
-﻿using EcommerceBackend.Contracts.Response;
+﻿using EcommerceBackend.Contracts;
 using EcommerceBackend.Repository.Abstract;
 using System.Security.Claims;
 

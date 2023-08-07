@@ -1,7 +1,6 @@
 ﻿using EcommerceBackend.Domain;
 using EcommerceBackend.Helpers;
 using EcommerceBackend.Repository.Abstract;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace EcommerceBackend.Repository
@@ -51,21 +50,6 @@ namespace EcommerceBackend.Repository
             try
             {
                 await Collection.InsertOneAsync(employee);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> DeleteEmployee(Guid employeeId)
-        {
-            try
-            {
-                var filter = Builders<User>.Filter.Eq(x => x.UserId, employeeId);
-                await Collection.DeleteOneAsync(filter);
-
                 return true;
             }
             catch (Exception ex)

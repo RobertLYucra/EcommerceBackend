@@ -20,6 +20,7 @@ namespace EcommerceBackend.Controllers
         {
             try
             {
+                userLogin.Validate();
                 var user = _loginResource.GetUserLogin(userLogin);
                 if(user == null)
                 {

@@ -19,18 +19,23 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<TokenHelper>();
-
+builder.Services.AddLogging(x =>
+{
+    x.AddConsole();
+});
 //Repository
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 //Resource
 builder.Services.AddScoped<ILoginResource,LoginResource>();
 builder.Services.AddScoped<IUserResource, UserResource>();
+builder.Services.AddScoped<IProductResource, ProductResource>();
 
 //Mapper
 builder.Services.AddScoped<IUserMapper, UserMapper>();
-
+builder.Services.AddScoped<IProductMapper, ProductMapper>();
 
 builder.Services.AddCors(options =>
 {

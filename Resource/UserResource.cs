@@ -1,5 +1,5 @@
-﻿using EcommerceBackend.Contracts.Params;
-using EcommerceBackend.Contracts.Response;
+﻿using EcommerceBackend.Contracts;
+using EcommerceBackend.Contracts.Params;
 using EcommerceBackend.Domain;
 using EcommerceBackend.Mapper.Abstract;
 using EcommerceBackend.Repository.Abstract;
@@ -31,7 +31,6 @@ namespace EcommerceBackend.Resource
             {
                 throw ex;
             }
-
         }
 
         public async Task<UserResponse> GetById(Guid id)

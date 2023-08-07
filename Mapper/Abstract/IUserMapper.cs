@@ -1,5 +1,5 @@
-﻿using EcommerceBackend.Contracts.Params;
-using EcommerceBackend.Contracts.Response;
+﻿using EcommerceBackend.Contracts;
+using EcommerceBackend.Contracts.Params;
 using EcommerceBackend.Domain;
 
 namespace EcommerceBackend.Mapper.Abstract

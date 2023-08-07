@@ -1,5 +1,5 @@
-﻿using EcommerceBackend.Contracts.Params;
-using EcommerceBackend.Contracts.Response;
+﻿using EcommerceBackend.Contracts;
+using EcommerceBackend.Contracts.Params;
 
 namespace EcommerceBackend.Resource.Abstract
 {

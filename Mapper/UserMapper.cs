@@ -1,4 +1,4 @@
-﻿using EcommerceBackend.Contracts.Response;
+﻿using EcommerceBackend.Contracts;
 using EcommerceBackend.Domain;
 using EcommerceBackend.Mapper.Abstract;
 
@@ -12,6 +12,7 @@ namespace EcommerceBackend.Mapper
             {
                 UserId = user.UserId,
                 Rol = user.Rol,
+                UserName = user.Credentials.username,
                 Name = user.Name,
                 LastName = user.LastName,
                 Email = user.Email,

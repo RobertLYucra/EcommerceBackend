@@ -1,11 +1,9 @@
-﻿using EcommerceBackend.Contracts.Formats;
+﻿using EcommerceBackend.Contracts;
+using EcommerceBackend.Contracts.Formats;
 using EcommerceBackend.Contracts.Params;
-using EcommerceBackend.Contracts.Response;
-using EcommerceBackend.Helpers;
 using EcommerceBackend.Resource.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace EcommerceBackend.Controllers
 {
@@ -14,13 +12,10 @@ namespace EcommerceBackend.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserResource _userResource;
-        private readonly ILoginResource _loginResource;
-        private readonly IConfiguration _configuration;
-        public UserController(IUserResource userResource , ILoginResource loginResource , IConfiguration configuration)
+        public UserController(IUserResource userResource)
         {
             _userResource = userResource;
-           _loginResource = loginResource;
-            _configuration = configuration;
+          
         }
 
         [HttpGet]

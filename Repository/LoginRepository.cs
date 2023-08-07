@@ -17,6 +17,7 @@ namespace EcommerceBackend.Repository
 
         public async Task<User> GetUser(UserLogin userLogin)
         {
+            userLogin.Validate();
             try
             {
             var filter = Builders<User>.Filter.And(
