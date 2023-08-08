@@ -10,11 +10,9 @@ namespace EcommerceBackend.Resource
     public class ProductResource : IProductResource
     {
         private readonly IProductRepository _productRepository;
-        private readonly IConfiguration _configuration;
         private readonly IProductMapper _productMapper;
-        public ProductResource(IConfiguration configuration, IProductRepository productRepository, IProductMapper productMapper)
+        public ProductResource(IProductRepository productRepository, IProductMapper productMapper)
         {
-            _configuration = configuration;
             _productRepository = productRepository;
             _productMapper = productMapper;
         }

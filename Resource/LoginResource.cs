@@ -59,9 +59,9 @@ namespace EcommerceBackend.Resource
                     _configuration["JWT:Issuer"],
                     _configuration["JWT:Audience"],
                     claims,
-                    expires: DateTime.Now.AddDays(15),
+                    expires: DateTime.Now.AddHours(2),
                     signingCredentials: credentials
-);
+                    );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

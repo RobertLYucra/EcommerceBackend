@@ -27,15 +27,19 @@ builder.Services.AddLogging(x =>
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IVentaRepository, VentaRepository>();
 
 //Resource
 builder.Services.AddScoped<ILoginResource,LoginResource>();
 builder.Services.AddScoped<IUserResource, UserResource>();
 builder.Services.AddScoped<IProductResource, ProductResource>();
+builder.Services.AddScoped<IVentaResource, VentaResource>();
+
 
 //Mapper
 builder.Services.AddScoped<IUserMapper, UserMapper>();
 builder.Services.AddScoped<IProductMapper, ProductMapper>();
+builder.Services.AddScoped<IVentaMapper, VentaMapper>();
 
 builder.Services.AddCors(options =>
 {

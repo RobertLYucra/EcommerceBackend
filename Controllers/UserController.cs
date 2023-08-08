@@ -32,7 +32,7 @@ namespace EcommerceBackend.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles ="Administrador")]
         [HttpGet]
         [Route("/autorize")]
         public async Task<IActionResult> GetAutoRize()
@@ -87,8 +87,7 @@ namespace EcommerceBackend.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEmployee(UserParams userParams)
         {
-            userParams.Credentials.Validate();
-
+            userParams.Credentials!.Validate();
             var userResponse = await _userResource.CreateEmployee(userParams);
             if(userResponse != null)
             {
