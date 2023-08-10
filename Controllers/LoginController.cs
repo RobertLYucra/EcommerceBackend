@@ -2,6 +2,7 @@
 using EcommerceBackend.Domain;
 using EcommerceBackend.Resource.Abstract;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EcommerceBackend.Controllers
 {
@@ -10,9 +11,11 @@ namespace EcommerceBackend.Controllers
     public class LoginController : ControllerBase
     {
         private readonly ILoginResource _loginResource;
-        public LoginController(ILoginResource loginResource)
+        private readonly IUserResource  _userResource;
+        public LoginController(ILoginResource loginResource, IUserResource userResource  )
         {
             _loginResource = loginResource;
+            _userResource = userResource;
         }
 
         [HttpPost]
@@ -32,6 +35,15 @@ namespace EcommerceBackend.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet("/claims")]
+        public IActionResult ValidateUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var validated = _loginResource.ValidateToken(identity);
+            if (validated == null) return NotFound(new MessageResponse(false,"Token no valido",null));
+            return NotFound(new MessageResponse(true, "Token validado", validated));
         }
     }
 }
