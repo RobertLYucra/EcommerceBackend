@@ -22,7 +22,13 @@ namespace EcommerceBackend.Controllers
         public async Task<IActionResult> GetAllProducts()
         {
             var allProducts = await _productResource.GetAllProducts();
-            return Ok(new MessageResponseList<ProductResponse>(true, "Todos los produsctos", allProducts));
+            return Ok(new MessageResponseList<ProductResponse>(true, "Todos los productos", allProducts));
+        }
+        [HttpGet("{category}")]
+        public async Task<IActionResult> GetProductByCategory(string category)
+        {
+            var allProducts = await _productResource.GetProductByCategory(category);
+            return Ok(new MessageResponseList<ProductResponse>(true, "Todos los productos", allProducts));
         }
 
         [HttpGet("{productId}")]

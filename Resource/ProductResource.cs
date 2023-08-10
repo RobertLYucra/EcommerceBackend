@@ -121,5 +121,12 @@ namespace EcommerceBackend.Resource
                 throw ex;
             }
         }
+
+        public async Task<List<ProductResponse>> GetProductByCategory(string category)
+        {
+            var products = await _productRepository.GetAllProducts();
+            var productResponse = products.Where(x=>x.Categoria == category).ToList();
+            return productResponse.Select(x=> _productMapper.ProductResponse(x)).ToList();  
+        }
     }
 }

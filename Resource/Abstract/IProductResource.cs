@@ -11,5 +11,6 @@ namespace EcommerceBackend.Resource.Abstract
         Task<ProductResponse> CreateProduct(ProductParams productParams);
         Task<ProductResponse> UpdateProduct(ProductParams productParams,Guid productId);
         Task<ProductResponse> DeleteProduct(Guid productId);
+        public Task<List<ProductResponse>> GetProductByCategory(string category);
     }
 }

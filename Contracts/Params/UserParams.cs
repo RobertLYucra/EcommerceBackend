@@ -5,7 +5,6 @@ namespace EcommerceBackend.Contracts.Params
 {
     public class UserParams
     {
-        public Guid? UserId { get; set; }
         public string Rol { get; set; }
         public UserLogin?  Credentials { get; set; }
         public string Name { get; set; }
